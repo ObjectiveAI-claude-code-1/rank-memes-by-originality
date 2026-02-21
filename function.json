@@ -1,0 +1,111 @@
+{
+  "type": "vector.function",
+  "output_length": {
+    "$jmespath": "length(input)"
+  },
+  "input_split": {
+    "$starlark": "[[item] for item in input]"
+  },
+  "input_merge": {
+    "$starlark": "[item for sublist in input for item in sublist]"
+  },
+  "input_schema": {
+    "type": "array",
+    "description": "A collection of memes to rank by originality, from most original to least original.",
+    "minItems": 2,
+    "items": {
+      "type": "image",
+      "description": "A meme to evaluate for originality based on conceptual novelty, structural inventiveness, and surprise."
+    }
+  },
+  "tasks": [
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Show me a meme that introduces a genuinely fresh idea. I want a concept I have never encountered before — something that pairs ideas nobody has thought to combine, finds humor in an uncommented-on corner of human experience, or offers a perspective that feels like a true discovery rather than a recycled joke or a familiar observation repackaged. The underlying thought itself should feel new."
+            }
+          ]
+        }
+      ],
+      "responses": {
+        "$starlark": "[[item] for item in input]"
+      },
+      "output": {
+        "$jmespath": "output.scores"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Generate a meme for me."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "Sure! Here is a classic two-panel Drake meme. The top panel shows disapproval and the bottom panel shows approval, with a relatable everyday observation filled into the standard template format."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "That is way too formulaic. I want a meme that does something I have never seen before with its format, template, or visual structure. Subvert a familiar template, layer formats in an unexpected way, use an unusual image choice, break the conventional layout, or abandon standard meme construction entirely. Show me something structurally inventive — the way the meme is built should feel surprising on its own."
+            }
+          ]
+        }
+      ],
+      "responses": {
+        "$starlark": "[[item] for item in input]"
+      },
+      "output": {
+        "$jmespath": "output.scores"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are a meme connoisseur who has spent years deeply immersed in internet culture. You have seen every major template, every viral format, and every predictable punchline. Very little surprises you anymore. When asked to share a meme, you always choose the one that most defies your expectations — the one whose setup, delivery, or punchline takes you somewhere you did not anticipate."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Show me a meme that would genuinely catch me off guard. I want something where the outcome could not have been predicted before I finished looking at it — something that sets up a familiar pattern and then breaks it, delivers its meaning through an unexpected mechanism, or layers irony where sincerity was assumed. Take me somewhere I did not expect to go."
+            }
+          ]
+        }
+      ],
+      "responses": {
+        "$starlark": "[[item] for item in input]"
+      },
+      "output": {
+        "$jmespath": "output.scores"
+      }
+    }
+  ],
+  "description": "Ranks a collection of memes from most original to least original by evaluating three dimensions: conceptual novelty (freshness of the underlying idea), structural inventiveness (creative use of format, template, and layout), and surprise (degree to which the meme defies expectations). Surfaces genuine creative discoveries over derivative content."
+}
